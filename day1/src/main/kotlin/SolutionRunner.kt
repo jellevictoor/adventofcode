@@ -1,4 +1,5 @@
-fun run() = FileCounter("input").count()
+fun run(counter:Countable) = FileCounter("input", counter).count()
 fun main() {
-    println(run())
+    println(run(Counter()))
+    println(run(SlidingCounter()))
 }

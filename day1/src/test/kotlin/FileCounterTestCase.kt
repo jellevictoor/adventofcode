@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 class FileCounterTestCase {
     @Test
     fun countInFile() {
-        val actual = FileCounter("testFile").count()
+        val actual = FileCounter("testFile",Counter()).count()
         val expected = 7
         assertEquals<Int>(expected, actual)
     }

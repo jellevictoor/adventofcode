@@ -1,15 +1,17 @@
-fun count(values: List<Int>): Int {
+class Counter : Countable {
+    override fun count(values: List<Int>): Int {
 
-    var count = 0
-    val it = values.iterator()
-    var previous = it.next()
-    while (it.hasNext()) {
-        val current = it.next()
-        if (previous < current) {
-            count++
+        var count = 0
+        val it = values.iterator()
+        var previous = it.next()
+        while (it.hasNext()) {
+            val current = it.next()
+            if (previous < current) {
+                count++
+            }
+            previous = current
         }
-        previous = current
-    }
 
-    return count
+        return count
+    }
 }
