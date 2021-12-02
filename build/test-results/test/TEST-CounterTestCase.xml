@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="CounterTestCase" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-12-02T19:16:38" hostname="MacBook-Pro-van-Jelle.local" time="0.044">
+  <properties/>
+  <testcase name="countTestCase" classname="CounterTestCase" time="0.04"/>
+  <testcase name="slidingCountTestCase" classname="CounterTestCase" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
