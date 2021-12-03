@@ -1,11 +1,11 @@
 class Counter : SolutionExecutor {
-    override fun process(input: List<Int>): Int {
+    override fun process(input: List<String>): Int {
 
         var count = 0
         val it = input.iterator()
-        var previous = it.next()
+        var previous = it.next().toInt()
         while (it.hasNext()) {
-            val current = it.next()
+            val current = it.next().toInt()
             if (previous < current) {
                 count++
             }
@@ -16,7 +16,7 @@ class Counter : SolutionExecutor {
     }
 }
 class SlidingCounter : SolutionExecutor {
-    override fun process(input: List<Int>): Int {
+    override fun process(input: List<String>): Int {
         var count = 0
         val zippedList = input
             .zip(input.subList(1, input.size))
@@ -33,7 +33,7 @@ class SlidingCounter : SolutionExecutor {
         return count
     }
 
-    private fun sum(value: Pair<Pair<Int, Int>, Int>) =
-        value.first.first + value.first.second + value.second
+    private fun sum(value: Pair<Pair<String, String>, String>) =
+        value.first.first.toInt() + value.first.second.toInt() + value.second.toInt()
 
 }

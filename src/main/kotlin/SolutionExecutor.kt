@@ -1,3 +1,3 @@
 interface SolutionExecutor {
-    fun process(input: List<Int>): Int
+    fun process(input: List<String>): Int
 }

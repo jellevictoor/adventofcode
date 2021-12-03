@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="FileCounterTestCase" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-12-02T19:16:39" hostname="MacBook-Pro-van-Jelle.local" time="0.019">
-  <properties/>
-  <testcase name="countInFile" classname="FileCounterTestCase" time="0.019"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

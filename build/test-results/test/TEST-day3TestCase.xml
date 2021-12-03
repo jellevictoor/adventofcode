@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="day3TestCase" tests="6" skipped="0" failures="0" errors="0" timestamp="2021-12-03T13:37:30" hostname="MacBook-Pro-van-Jelle.local" time="0.031">
+  <properties/>
+  <testcase name="mostFrequentBit" classname="day3TestCase" time="0.02"/>
+  <testcase name="gammaRateTestCase" classname="day3TestCase" time="0.007"/>
+  <testcase name="co2RatingTest" classname="day3TestCase" time="0.003"/>
+  <testcase name="oxygenRatingTest" classname="day3TestCase" time="0.0"/>
+  <testcase name="epsilonRateTestCase" classname="day3TestCase" time="0.001"/>
+  <testcase name="testTranspose" classname="day3TestCase" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
