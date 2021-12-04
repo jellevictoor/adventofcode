@@ -67,7 +67,7 @@ class Day4TestCase {
         )
 
         val winner = play(draw, boards)
-        val expected = 4512
+        val expected = 1924
         Assert.assertEquals(expected, winner)
     }
 }
