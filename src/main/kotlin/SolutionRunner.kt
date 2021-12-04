@@ -11,5 +11,7 @@ fun main() {
     println("day 3")
     println(run(PowerConsumptionCalculator(),"input-day3"))
     println(run(LifeSupportCalculator(),"input-day3"))
+    println("day 4")
+    println(run(BingoSolver(),"input-day4"))
 
 }
