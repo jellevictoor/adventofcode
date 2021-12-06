@@ -3,6 +3,7 @@ fun run(executor: SolutionExecutor, inputFile: String): Int {
 }
 
 fun main() {
+    /*
     println("day 1")
     println(run(Counter(), "input-day1"))
     println(run(SlidingCounter(), "input-day1"))
@@ -12,6 +13,8 @@ fun main() {
     println(run(PowerConsumptionCalculator(),"input-day3"))
     println(run(LifeSupportCalculator(),"input-day3"))
     println("day 4")
-    println(run(BingoSolver(),"input-day4"))
+    println(run(BingoSolver(),"input-day4"))*/
+    println("day 5")
+    println(run(MapSolver(), "input-day5"))
 
 }
