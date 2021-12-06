@@ -4,18 +4,15 @@ class MapSolver : SolutionExecutor {
     }
 }
 
-class SeaMap(
-    trajectories: List<Trajectory>,
-    private val gridSize: Int
-) {
+class SeaMap(trajectories: List<Trajectory>) {
     private val grid: Map<Point, Int>
 
     init {
         grid = trajectories
-            .map { it.getPoints() }
-            .flatten()
-            .groupingBy { it }
-            .eachCount()
+            .map { it.getPoints() } // trajects to points
+            .flatten() // all points in one list
+            .groupingBy { it } // group points by occurance
+            .eachCount() // count the number of same points
 
     }
 
@@ -29,31 +26,16 @@ class SeaMap(
                 trajectories
                     .map { Trajectory.from(it) }
             //.filter { it.isStraight() }
-            val gridSize = parsedTrajectories
-                .map { listOf(it.from, it.to) }
-                .flatten()
-                .map { listOf(it.x, it.y) }
-                .flatten()
-                .maxOf { it }
-            return SeaMap(parsedTrajectories, gridSize + 1)
+            return SeaMap(parsedTrajectories)
         }
     }
 }
 
-class Trajectory (val from: Point, val to: Point) {
-    fun isStraight(): Boolean = (from.x == to.x || from.y == to.y)
+class Trajectory(val from: Point, val to: Point) {
+    private fun isStraight(): Boolean = (from.x == to.x || from.y == to.y)
     fun getPoints(): List<Point> {
-        val xs = if (from.x > to.x) {
-            (to.x..from.x).reversed()
-        } else {
-            (from.x..to.x)
-        }.toList()
-
-        val ys = if (from.y > to.y) {
-            (to.y..from.y).reversed()
-        } else {
-            (from.y..to.y)
-        }.toList()
+        val xs = getRangeOfPoints(from.x, to.x)
+        val ys = getRangeOfPoints(from.y, to.y)
 
         if (isStraight()) {
             val points = mutableListOf<Point>()
@@ -67,6 +49,12 @@ class Trajectory (val from: Point, val to: Point) {
             return xs.zip(ys).map { Point(it.first, it.second) }
         }
     }
+
+    private fun getRangeOfPoints(from: Int, to: Int) = if (from > to) {
+        (to..from).reversed()
+    } else {
+        (from..to)
+    }.toList()
 
     companion object {
         fun from(line: String): Trajectory {
