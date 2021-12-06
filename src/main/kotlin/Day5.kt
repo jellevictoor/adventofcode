@@ -40,32 +40,31 @@ class SeaMap(
     }
 }
 
-class Trajectory private constructor(val from: Point, val to: Point) {
+class Trajectory (val from: Point, val to: Point) {
     fun isStraight(): Boolean = (from.x == to.x || from.y == to.y)
     fun getPoints(): List<Point> {
+        val xs = if (from.x > to.x) {
+            (to.x..from.x).reversed()
+        } else {
+            (from.x..to.x)
+        }.toList()
+
+        val ys = if (from.y > to.y) {
+            (to.y..from.y).reversed()
+        } else {
+            (from.y..to.y)
+        }.toList()
+
         if (isStraight()) {
             val points = mutableListOf<Point>()
-            for (x in from.x..to.x) {
-                for (y in from.y..to.y) {
+            for (x in xs) {
+                for (y in ys) {
                     points.add(Point(x, y))
                 }
             }
             return points
         } else {
-            val x = if (from.x > to.x) {
-                (to.x..from.x).reversed()
-            } else {
-                (from.x..to.x)
-            }.toList()
-
-            val y = if (from.y > to.y) {
-                (to.y..from.y).reversed()
-            } else {
-                (from.y..to.y)
-            }.toList()
-
-            return x.zip(y).map { Point(it.first, it.second) }
-
+            return xs.zip(ys).map { Point(it.first, it.second) }
         }
     }
 
@@ -75,17 +74,9 @@ class Trajectory private constructor(val from: Point, val to: Point) {
             val parsedFromTo = fromTo
                 .map { it.split(",") }
                 .map { Point(it[0].toInt(), it[1].toInt()) }
-            return fromPoints(parsedFromTo[0], parsedFromTo[1])
+            return Trajectory(parsedFromTo[0], parsedFromTo[1])
         }
 
-        fun fromPoints(from: Point, to: Point): Trajectory {
-            if (from.x + from.y > to.x + to.y) {
-                return Trajectory(to, from)
-            } else {
-                return Trajectory(from, to)
-            }
-
-        }
     }
 }
 
