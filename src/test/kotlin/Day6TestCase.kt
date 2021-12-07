@@ -14,4 +14,10 @@ class Day6TestCase {
         val actual = SchoolSimulator(input,80).calculatePopulation()
         Assert.assertEquals(5934,actual)
     }
+    @Test
+    fun bigExample(){
+        val input = listOf(3,4,3,1,2).map{Lanternfish(it)}
+        val actual = SchoolSimulator(input,256).calculatePopulation()
+        Assert.assertEquals(26984457539L,actual)
+    }
 }

@@ -1,4 +1,4 @@
-fun run(executor: SolutionExecutor, inputFile: String): Int {
+fun run(executor: SolutionExecutor, inputFile: String): Number {
     return FileProcessor(inputFile, executor).count()
 }
 
@@ -15,6 +15,7 @@ fun main() {
     println("day 4")
     println(run(BingoSolver(),"input-day4"))
     println("day 5")
-    println(run(MapSolver(), "input-day5"))*/
-    println(run(SchoolSimulator(listOf(),2), "input-day6"))
+    println(run(MapSolver(), "input-day5"))
+    println(run(SchoolSimulator(listOf(),256), "input-day6"))*/
+
 }

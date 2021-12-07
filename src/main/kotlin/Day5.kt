@@ -11,9 +11,8 @@ class SeaMap(trajectories: List<Trajectory>) {
         grid = trajectories
             .map { it.getPoints() } // trajects to points
             .flatten() // all points in one list
-            .groupingBy { it } // group points by occurance
+            .groupingBy { it } // group points by occurrence
             .eachCount() // count the number of same points
-
     }
 
     fun getNoOfDangerousAreas(dangerTreshold: Int): Int {
@@ -38,13 +37,13 @@ class Trajectory(val from: Point, val to: Point) {
         val ys = getRangeOfPoints(from.y, to.y)
 
         if (isStraight()) {
-            val points = mutableListOf<Point>()
-            for (x in xs) {
-                for (y in ys) {
-                    points.add(Point(x, y))
+            return sequence {
+                for (x in xs) {
+                    for (y in ys) {
+                        yield(Point(x, y))
+                    }
                 }
-            }
-            return points
+            }.toList()
         } else {
             return xs.zip(ys).map { Point(it.first, it.second) }
         }
@@ -64,7 +63,6 @@ class Trajectory(val from: Point, val to: Point) {
                 .map { Point(it[0].toInt(), it[1].toInt()) }
             return Trajectory(parsedFromTo[0], parsedFromTo[1])
         }
-
     }
 }
 
