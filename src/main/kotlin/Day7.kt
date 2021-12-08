@@ -21,13 +21,13 @@ class CrabGroup(val initalPosition: List<Int>) : SolutionExecutor {
     private fun bruteForceBestSolution(): Int {
         val sortedPosition = initalPosition.sorted()
         return (sortedPosition.first()..sortedPosition.last())
-            .map{Pair(it, costToPosition(it))} // calculate all cost to each position
+            .map { Pair(it, costToPosition(it))} // calculate all cost to each position
             .sortedBy { it.second } // sort by cost
             .first().first // take the position with lowest cost
     }
 
     private fun costToPosition(position: Int) =
-        initalPosition.map { inner -> moveCost(position - inner) }.sum()
+        initalPosition.map { moveCost(position - it) }.sum()
 
     fun moveCost(move: Int): Int {
         return (1..abs(move)).fold(0) { i, j -> i + j }
