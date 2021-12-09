@@ -1,28 +1,25 @@
-class HeightMapSeeker():SolutionExecutor {
+class HeightMapSeeker() : SolutionExecutor {
     override fun process(input: List<String>): Number {
-        return HeightMap.from(input).getRiskLevel()
+        return HeightMap.from(input).getBasins()
+            .sortedByDescending { it.size }
+            .take(3)
+            .map { it.size }
+            .reduce { acc, i ->  acc * i }
     }
 }
 
 class HeightMap(val grid: Grid) {
     fun getLowPoints(): List<Int> {
-        val lowPoints = mutableListOf<Point>()
-        for (point in grid.points) {
-            val isLowPoint = point
-                .adjecentLocations()
-                .filter { it.x >= grid.minX && it.y >= grid.minY && it.x <= grid.maxX && it.y <= grid.maxY }
-                .map { grid.lookup(it.x,it.y) }
-                .all { it.value > point.value }
-            if (isLowPoint) {
-                lowPoints.add(point)
-            }
-
-        }
-        return lowPoints.map { it.value }
+        return grid.getLowPoints().map { it.value }
     }
-    fun getRiskLevel():Int{
+
+    fun getBasins(): List<Basin> {
+        return grid.getBasins()
+    }
+
+    fun getRiskLevel(): Int {
         return getLowPoints()
-            .map { it +1 }
+            .map { it + 1 }
             .sum()
     }
 
@@ -30,7 +27,7 @@ class HeightMap(val grid: Grid) {
         fun from(input: List<String>): HeightMap {
             val grid = mutableListOf<Point>()
             val list = input.map { it -> it.toCharArray().map { Character.getNumericValue(it) } }
-            for (i in 0 until list.size) {
+            for (i in list.indices) {
                 for (j in 0 until list[i].size) {
                     grid.add(Point(i, j, list[i][j]))
                 }
@@ -39,19 +36,74 @@ class HeightMap(val grid: Grid) {
         }
     }
 
-    data class Point(val x: Int, val y: Int, val value: Int = -1) {
-        fun adjecentLocations(): List<Point> {
-            return listOf(Point(x - 1, y), Point(x + 1, y), Point(x, y - 1), Point(x, y + 1))
+    data class Point(val x: Int, val y: Int, val value: Int = -1)
+
+    data class Grid(private val points: List<Point>) {
+        private val maxX = points.maxOf { it.x }
+        private val minX = points.minOf { it.x }
+        private val maxY = points.maxOf { it.y }
+        private val minY = points.minOf { it.y }
+        fun lookup(x: Int, y: Int): Point {
+            return points.first { it.x == x && it.y == y }
+        }
+
+        fun adjecentLocations(point: Point): List<Point> {
+            return listOf(
+                Point(point.x - 1, point.y),
+                Point(point.x + 1, point.y),
+                Point(point.x, point.y - 1),
+                Point(point.x, point.y + 1)
+            ).filter { it.x >= minX && it.y >= minY && it.x <= maxX && it.y <= maxY }
+                .map { lookup(it.x, it.y) }
+        }
+
+        fun getLowPoints(): List<Point> {
+            val lowPoints = mutableListOf<Point>()
+            for (point in points) {
+                val isLowPoint =
+                    adjecentLocations(point)
+                        .map { lookup(it.x, it.y) }
+                        .all { it.value > point.value }
+                if (isLowPoint) {
+                    lowPoints.add(point)
+                }
+            }
+            return lowPoints
+        }
+
+        fun getBasins(): List<Basin> {
+            return Basin.from(this)
         }
     }
 
-    data class Grid(val points: List<Point>) {
-        val maxX = points.maxOf { it.x }
-        val minX = points.minOf { it.x }
-        val maxY = points.maxOf { it.y }
-        val minY = points.minOf { it.y }
-        fun lookup(x: Int, y: Int): Point {
-            return points.first { it.x == x && it.y == y }
+    data class Basin(val points: MutableList<Point>) {
+        val size = points.size
+
+        companion object {
+            fun from(grid: Grid): List<Basin> {
+                return grid.getLowPoints()
+                    .map { point ->
+                        val basin = Basin(list(grid, point, Basin(mutableListOf(point))))
+                        basin
+                    }
+            }
+
+            private fun list(grid: Grid, point: Point, basin: Basin): MutableList<Point> {
+                val lowerPoints = grid.adjecentLocations(point)
+                    .filter { !basin.points.contains(it) }
+                    .filter { it.value < 9 }
+                return if (lowerPoints.isEmpty())
+                    basin.points
+                else {
+                    basin.points.addAll(lowerPoints)
+                    println(basin.points.map { "" + it.x + " " + it.y })
+                    lowerPoints
+                        .map { list(grid, it, basin) }
+                        .flatten()
+                        .toSet()
+                        .toMutableList()
+                }
+            }
         }
     }
 }
