@@ -17,7 +17,8 @@ fun main() {
     println("day 5")
     println(run(MapSolver(), "input-day5"))
     println(run(SchoolSimulator(listOf(),256), "input-day6"))
-    println(run(CrabGroup(listOf()), "input-day7"))*/
-    println(run(Decoder(), "input-day8"))
+    println(run(CrabGroup(listOf()), "input-day7"))
+    println(run(Decoder(), "input-day8"))*/
+    println(run(HeightMapSeeker(), "input-day9"))
 
 }
