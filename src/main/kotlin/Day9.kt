@@ -83,12 +83,12 @@ class HeightMap(val grid: Grid) {
             fun from(grid: Grid): List<Basin> {
                 return grid.getLowPoints()
                     .map { point ->
-                        val basin = Basin(list(grid, point, Basin(mutableListOf(point))))
+                        val basin = Basin(seek(grid, point, Basin(mutableListOf(point))))
                         basin
                     }
             }
 
-            private fun list(grid: Grid, point: Point, basin: Basin): MutableList<Point> {
+            private fun seek(grid: Grid, point: Point, basin: Basin): MutableList<Point> {
                 val lowerPoints = grid.adjecentLocations(point)
                     .filter { !basin.points.contains(it) }
                     .filter { it.value < 9 }
@@ -96,9 +96,8 @@ class HeightMap(val grid: Grid) {
                     basin.points
                 else {
                     basin.points.addAll(lowerPoints)
-                    println(basin.points.map { "" + it.x + " " + it.y })
                     lowerPoints
-                        .map { list(grid, it, basin) }
+                        .map { seek(grid, it, basin) }
                         .flatten()
                         .toSet()
                         .toMutableList()
