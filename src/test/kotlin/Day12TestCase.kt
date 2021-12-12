@@ -130,9 +130,14 @@ class Day12TestCase {
 
     @Test
     fun canVisit() {
-        val path = Path(listOf(CaveNode("start"), CaveNode("A"), CaveNode("b")))
+        var path = Path(listOf(CaveNode("start"), CaveNode("A"), CaveNode("b")))
         assertEquals(true, path.canVisit(CaveNode("A")))
+        assertEquals(true, path.canVisit(CaveNode("b")))
+        path = Path(listOf(CaveNode("start"), CaveNode("A"), CaveNode("b"), CaveNode("b")))
         assertEquals(false, path.canVisit(CaveNode("b")))
+        assertEquals(true, path.canVisit(CaveNode("c")))
+        path = Path(listOf(CaveNode("start"), CaveNode("A"), CaveNode("b"), CaveNode("b"), CaveNode("c")))
+        assertEquals(false, path.canVisit(CaveNode("c")))
     }
 
     @Test
@@ -148,17 +153,45 @@ class Day12TestCase {
         )
         val actual = Graph.of(input).paths()
         val expected = listOf(
+            "start,A,b,A,b,A,c,A,end",
+            "start,A,b,A,b,A,end",
+            "start,A,b,A,b,end",
+            "start,A,b,A,c,A,b,A,end",
+            "start,A,b,A,c,A,b,end",
+            "start,A,b,A,c,A,c,A,end",
             "start,A,b,A,c,A,end",
             "start,A,b,A,end",
+            "start,A,b,d,b,A,c,A,end",
+            "start,A,b,d,b,A,end",
+            "start,A,b,d,b,end",
             "start,A,b,end",
+            "start,A,c,A,b,A,b,A,end",
+            "start,A,c,A,b,A,b,end",
+            "start,A,c,A,b,A,c,A,end",
             "start,A,c,A,b,A,end",
+            "start,A,c,A,b,d,b,A,end",
+            "start,A,c,A,b,d,b,end",
             "start,A,c,A,b,end",
+            "start,A,c,A,c,A,b,A,end",
+            "start,A,c,A,c,A,b,end",
+            "start,A,c,A,c,A,end",
             "start,A,c,A,end",
             "start,A,end",
+            "start,b,A,b,A,c,A,end",
+            "start,b,A,b,A,end",
+            "start,b,A,b,end",
+            "start,b,A,c,A,b,A,end",
+            "start,b,A,c,A,b,end",
+            "start,b,A,c,A,c,A,end",
             "start,b,A,c,A,end",
             "start,b,A,end",
+            "start,b,d,b,A,c,A,end",
+            "start,b,d,b,A,end",
+            "start,b,d,b,end",
             "start,b,end"
         )
+        actual.forEach { println(it) }
+        assertEquals( 36,actual.size )
         assertTrue { expected.containsAll(actual.map { it.toString() }) }
     }
 
@@ -176,29 +209,8 @@ class Day12TestCase {
             Pair("kj", "HN"),
             Pair("kj", "dc")
         )
-        val expected = listOf(
-            "start,HN,dc,HN,end",
-            "start,HN,dc,HN,kj,HN,end",
-            "start,HN,dc,end",
-            "start,HN,dc,kj,HN,end",
-            "start,HN,end",
-            "start,HN,kj,HN,dc,HN,end",
-            "start,HN,kj,HN,dc,end",
-            "start,HN,kj,HN,end",
-            "start,HN,kj,dc,HN,end",
-            "start,HN,kj,dc,end",
-            "start,dc,HN,end",
-            "start,dc,HN,kj,HN,end",
-            "start,dc,end",
-            "start,dc,kj,HN,end",
-            "start,kj,HN,dc,HN,end",
-            "start,kj,HN,dc,end",
-            "start,kj,HN,end",
-            "start,kj,dc,HN,end",
-            "start,kj,dc,end"
-        )
         val actual = Graph.of(input).paths()
-        assertTrue { expected.containsAll(actual.map { it.toString() }) }
+        assertEquals( 103,actual.size )
     }
 
     @Test
@@ -223,7 +235,7 @@ class Day12TestCase {
             Pair("pj", "fs"),
             Pair("start", "RW")
         )
-        assertEquals(226, Graph.of(input).paths().size)
+        assertEquals(3509, Graph.of(input).paths().size)
 
     }
 }

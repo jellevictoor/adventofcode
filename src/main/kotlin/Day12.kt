@@ -6,6 +6,7 @@ class Day12 : SolutionExecutor {
 }
 
 class Graph(val input: Map<CaveNode, List<CaveNode>>) {
+    var smallCaveToVisitTwice: String? = null
     fun paths(): List<Path> {
         return input
             .filter { it.key.isStart() }
@@ -14,13 +15,16 @@ class Graph(val input: Map<CaveNode, List<CaveNode>>) {
     }
 
     private fun traverse(key: CaveNode, nextNodes: List<CaveNode>, path: Path): List<Path> {
-        println(path)
         if (key.isEnd()) {
             return listOf(path)
         } else {
             return nextNodes
                 .filter { path.canVisit(it) }
-                .map { path.expandPath(it) } // listOf(A, b)
+                .map {
+                    smallCaveToVisitTwice = path.findTwiceVisitSmallCave()
+                    it
+                }
+                .map { path.expandPath(it) }
                 .map { traverse(it.last(), getNextNodes(it.last()), it) }
                 .flatten()
         }
@@ -53,13 +57,41 @@ data class Path(val nodes: List<CaveNode>) {
     fun expandPath(cave: CaveNode) = Path(nodes + cave)
 
     fun last() = nodes.last()
+
     override fun toString(): String {
         return nodes.joinToString(",")
     }
 
     fun contains(node: CaveNode) = nodes.contains(node)
-    fun canVisit(it: CaveNode): Boolean {
-        return !contains(it) || !it.isSmall()
+
+    fun canVisit(node: CaveNode, smallCaveToVisitTwice: String? = null): Boolean {
+        if (node.isStart()) {
+            return false
+        } else if (node.isSmall()) {
+            if (contains(node) && smallCaveToVisitTwice == null) {
+                return nodes
+                    .filter { it.isSmall() }
+                    .groupingBy { it }
+                    .eachCount()
+                    .filter { it.value > 1 }
+                    .isEmpty()
+            } else {
+                return true
+            }
+        } else {
+            return true
+        }
+    }
+
+    fun findTwiceVisitSmallCave(): String? {
+        return nodes
+            .filter { it.isSmall() }
+            .groupingBy { it }
+            .eachCount()
+            .filter { it.value > 1 }
+            .map { it.key }
+            .map { it.name }
+            .firstOrNull()
     }
 
     companion object {
