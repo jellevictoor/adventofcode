@@ -1,11 +1,10 @@
-import org.hamcrest.CoreMatchers
 import org.junit.Assert
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-public class Day12TestCase {
+class Day12TestCase {
     @Test
     fun smallCave() {
         assertFalse { CaveNode("A").isSmall() }
@@ -130,11 +129,19 @@ public class Day12TestCase {
     }
 
     @Test
+    fun canVisit() {
+        val path = Path(listOf(CaveNode("start"), CaveNode("A"), CaveNode("b")))
+        assertEquals(true, path.canVisit(CaveNode("A")))
+        assertEquals(false, path.canVisit(CaveNode("b")))
+    }
+
+    @Test
     fun testSmallGraph() {
         val input = listOf(
             Pair("start", "A"),
             Pair("start", "b"),
             Pair("A", "c"),
+            Pair("A", "b"),
             Pair("b", "d"),
             Pair("A", "end"),
             Pair("b", "end")
@@ -152,71 +159,74 @@ public class Day12TestCase {
             "start,b,A,end",
             "start,b,end"
         )
-        assertEquals(expected, actual.map { it.toString() })
+        assertTrue { expected.containsAll(actual.map { it.toString() }) }
+    }
+
+    @Test
+    fun largerGraph() {
+        val input = listOf(
+            Pair("dc", "end"),
+            Pair("HN", "start"),
+            Pair("start", "kj"),
+            Pair("dc", "start"),
+            Pair("dc", "HN"),
+            Pair("LN", "dc"),
+            Pair("HN", "end"),
+            Pair("kj", "sa"),
+            Pair("kj", "HN"),
+            Pair("kj", "dc")
+        )
+        val expected = listOf(
+            "start,HN,dc,HN,end",
+            "start,HN,dc,HN,kj,HN,end",
+            "start,HN,dc,end",
+            "start,HN,dc,kj,HN,end",
+            "start,HN,end",
+            "start,HN,kj,HN,dc,HN,end",
+            "start,HN,kj,HN,dc,end",
+            "start,HN,kj,HN,end",
+            "start,HN,kj,dc,HN,end",
+            "start,HN,kj,dc,end",
+            "start,dc,HN,end",
+            "start,dc,HN,kj,HN,end",
+            "start,dc,end",
+            "start,dc,kj,HN,end",
+            "start,kj,HN,dc,HN,end",
+            "start,kj,HN,dc,end",
+            "start,kj,HN,end",
+            "start,kj,dc,HN,end",
+            "start,kj,dc,end"
+        )
+        val actual = Graph.of(input).paths()
+        assertTrue { expected.containsAll(actual.map { it.toString() }) }
+    }
+
+    @Test
+    fun superLarge() {
+        val input = listOf(
+            Pair("fs", "end"),
+            Pair("he", "DX"),
+            Pair("fs", "he"),
+            Pair("start", "DX"),
+            Pair("pj", "DX"),
+            Pair("end", "zg"),
+            Pair("zg", "sl"),
+            Pair("zg", "pj"),
+            Pair("pj", "he"),
+            Pair("RW", "he"),
+            Pair("fs", "DX"),
+            Pair("pj", "RW"),
+            Pair("zg", "RW"),
+            Pair("start", "pj"),
+            Pair("he", "WI"),
+            Pair("zg", "he"),
+            Pair("pj", "fs"),
+            Pair("start", "RW")
+        )
+        assertEquals(226, Graph.of(input).paths().size)
+
     }
 }
 
-class Graph(val input: Map<CaveNode, List<CaveNode>>) {
-    fun paths(): List<Path> {
-        return input
-            .filter { it.key.isStart() }
-            .map { traverse(it.key, it.value, Path.emptyPath(it.key)) }
-            .flatten()
-    }
-
-    private fun traverse(key: CaveNode, nextNodes: List<CaveNode>, path: Path): List<Path> {
-        println(path)
-        if (key.isEnd()) {
-            return listOf(path)
-        } else {
-            return nextNodes
-                .map { path.expandPath(it) } // listOf(A, b)
-                .map { traverse(it.last(), getNextNodes(it.last()), it) }
-                .flatten()
-        }
-    }
-
-
-    fun getNextNodes(it: CaveNode): List<CaveNode> = input.getOrDefault(it, emptyList())
-
-
-    companion object {
-        fun of(input: List<Pair<String, String>>): Graph {
-            val map = mutableMapOf<CaveNode, MutableList<CaveNode>>()
-            input
-                .forEach { it ->
-                    val from = CaveNode(it.first)
-                    map.putIfAbsent(from, mutableListOf())
-                    map[CaveNode(it.first)]?.add(CaveNode(it.second))
-                }
-            val immutable = map
-                .map { Pair(it.key, it.value.toList()) }
-                .toMap()
-            return Graph(immutable)
-        }
-    }
-}
-
-data class Path(val nodes: List<CaveNode>) {
-    fun expandPath(cave: CaveNode) = Path(nodes + cave)
-
-    fun last() = nodes.last()
-    override fun toString(): String {
-        return nodes.joinToString(",")
-    }
-
-    companion object {
-        fun emptyPath(cave: CaveNode): Path = Path(listOf(cave))
-    }
-}
-
-data class CaveNode(val name: String) {
-    fun isSmall() = name.all { Character.isLowerCase(it) }
-    fun isStart() = name == "start"
-    fun isEnd() = name == "end"
-    override fun toString(): String {
-        return name
-    }
-}
 
 
