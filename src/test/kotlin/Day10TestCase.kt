@@ -35,11 +35,11 @@ class Day10TestCase {
 
     @Test
     fun exampleCompletion() {
-        assertEquals(288957, Line("[({(<(())[]>[[{[]{<()<>>").completeLine())
-        assertEquals(5566, Line("[(()[<>])]({[<{<<[]>>(").completeLine())
-        assertEquals(1480781, Line("(((({<>}<{<{<>}{[]{[]{}").completeLine())
-        assertEquals(995444, Line("{<[[]]>}<{[{[{[]{()[[[]").completeLine())
-        assertEquals(294, Line("<{([{{}}[<[[[<>{}]]]>[]]").completeLine())
+        assertEquals(288957L, Line("[({(<(())[]>[[{[]{<()<>>").completeLine())
+        assertEquals(5566L, Line("[(()[<>])]({[<{<<[]>>(").completeLine())
+        assertEquals(1480781L, Line("(((({<>}<{<{<>}{[]{[]{}").completeLine())
+        assertEquals(995444L, Line("{<[[]]>}<{[{[{[]{()[[[]").completeLine())
+        assertEquals(294L, Line("<{([{{}}[<[[[<>{}]]]>[]]").completeLine())
     }
 
     @Test
@@ -53,6 +53,6 @@ class Day10TestCase {
                 "<{([{{}}[<[[[<>{}]]]>[]]"
             )
         )
-        assertEquals(288957, actual)
+        assertEquals(288957L, actual)
     }
 }
