@@ -25,44 +25,79 @@ public class Day11TestCase {
 
     @Test
     fun fourOctopusses() {
-        val cave = Cave.fromStartSituation(listOf(listOf(9, 1), listOf(1, 1)))
+        val cave = Cave.fromStartSituation(
+            listOf(
+                listOf(9, 1),
+                listOf(1, 1)
+            )
+        )
         val nextDayCave = cave.moveDay(1)
         assertEquals(1, nextDayCave.flashes)
-        assertEquals(3, nextDayCave.octopusses.count { it.charge == 2 })
+        assertEquals(3, nextDayCave.octopusses.count { it.charge == 3 })
+    }
+
+    @Test
+    fun findAdjecentOctopusses() {
+        val cave = Cave.fromStartSituation(listOf(listOf(9, 1), listOf(1, 1)))
+        val topLeft = cave.octopusses[0]
+        assertEquals(3, cave.findAdjecent(topLeft).count())
+    }
+
+    @Test
+    fun flashPerNeighbour() {
+        val cave = Cave.fromStartSituation(
+            listOf(
+                listOf(9, 9, 9),
+                listOf(9, 1, 9),
+                listOf(9, 9, 9),
+            )
+        )
+        println(cave)
+        assertEquals(9, cave.moveDay(1).flashes)
+        println(cave)
+        assertEquals(9, cave.moveDay(1).flashes)
+    }
+
+    @Test
+    fun fullTest() {
+        val cave = Cave.fromStartSituation(
+            listOf(
+                listOf(1, 1, 1, 1, 1),
+                listOf(1, 9, 9, 9, 1),
+                listOf(1, 9, 1, 9, 1),
+                listOf(1, 9, 9, 9, 1),
+                listOf(1, 1, 1, 1, 1)
+            )
+        )
+        assertEquals(9, cave.moveDay(1).flashes)
+        assertEquals(9, cave.moveDay(1).flashes)
+    }
+
+
+    @Test
+    fun bigAss100DayTest() {
+        val cave = Cave.fromStartSituation(
+            listOf(
+                listOf(5, 4, 8, 3, 1, 4, 3, 2, 2, 3),
+                listOf(2, 7, 4, 5, 8, 5, 4, 7, 1, 1),
+                listOf(5, 2, 6, 4, 5, 5, 6, 1, 7, 3),
+                listOf(6, 1, 4, 1, 3, 3, 6, 1, 4, 6),
+                listOf(6, 3, 5, 7, 3, 8, 5, 4, 7, 8),
+                listOf(4, 1, 6, 7, 5, 2, 4, 6, 4, 5),
+                listOf(2, 1, 7, 6, 8, 4, 1, 7, 2, 1),
+                listOf(6, 8, 8, 2, 8, 8, 1, 1, 3, 4),
+                listOf(4, 8, 4, 6, 8, 4, 8, 5, 5, 4),
+                listOf(5, 2, 8, 3, 7, 5, 1, 5, 2, 6)
+            )
+        )
+        println(cave)
+        assertEquals(0, cave.moveDay(1).flashes, cave.toString())
+        println(cave)
+        assertEquals(35, cave.moveDay(1).flashes, cave.toString())
+        println(cave)
+        assertEquals(204, cave.moveDay(8).flashes, cave.toString())
+        println(cave)
+        assertEquals(1656, cave.moveDay(90).flashes, cave.toString())
     }
 }
 
-class DumboOctopus(val x: Int, val y: Int, val charge: Int, val flash: Boolean) {
-
-    fun increaseCharge(): DumboOctopus {
-        if (charge + 1 > 9) {
-            return DumboOctopus(x, y, 0, true)
-        } else {
-            return DumboOctopus(x, y, charge + 1, false)
-        }
-    }
-}
-
-class Cave(val day: Int, val flashes: Int, val octopusses: List<DumboOctopus>) {
-    companion object {
-        fun fromStartSituation(startPosition: List<List<Int>>): Cave {
-            val octopusses = mutableListOf<DumboOctopus>()
-            for (i in startPosition.indices) {
-                for (j in startPosition[i].indices) {
-                    octopusses.add(DumboOctopus(i, j, startPosition[i][j], false))
-                }
-            }
-            return Cave(0, 0, octopusses)
-        }
-    }
-
-    fun moveDay(day: Int = 1): Cave {
-        var cave: Cave = this
-        for (i in 1..day) {
-            val newOctopusses = cave.octopusses.map { it.increaseCharge() }
-            val newFlashes = newOctopusses.count { it.flash }
-            cave = Cave(cave.day + 1, cave.flashes + newFlashes, newOctopusses)
-        }
-        return cave
-    }
-}
