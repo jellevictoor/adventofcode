@@ -21,7 +21,10 @@ fun main() {
     println(run(Decoder(), "input-day8"))
     println(run(HeightMapSeeker(), "input-day9"))
     println(run(EncodingRunner(), "input-day10"))
-    println(run(Day11(), "input-day11"))*/
+    println(run(Day11(), "input-day11"))
     println(run(Day12(), "input-day12"))
+    */
+    println(run(Day13(), "input-day13"))
+
 
 }
