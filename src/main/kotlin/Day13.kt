@@ -10,12 +10,9 @@ class Day13 : SolutionExecutor {
             .map { it[1] }
         folds
             .forEach {
-                val instruction = it.split("=")
-                if(instruction[0] == "x") {
-                    from = from.foldX(instruction[1].toInt())
-                }else{
-                    from = from.foldY(instruction[1].toInt())
-                }
+                val instruction = it.split("=")[0].uppercase()
+                val position = it.split("=")[1].toInt()
+                from = from.fold(Paper.Axis.valueOf(instruction), position)
 
             }
         println(from)
@@ -25,6 +22,18 @@ class Day13 : SolutionExecutor {
 }
 
 data class Paper(val state: List<Dot>) {
+    fun fold(axis: Axis, position: Int): Paper {
+        return when (axis) {
+            Axis.X -> foldX(position)
+            Axis.Y -> foldY(position)
+        }
+    }
+
+    enum class Axis {
+        X,
+        Y,
+    }
+
     fun foldX(position: Int): Paper {
         val newState = (state.filter { it.x > position }
             .map { Dot(position - (it.x - position), it.y) }
@@ -48,17 +57,18 @@ data class Paper(val state: List<Dot>) {
     override fun toString(): String {
         val maxX = state.maxOf { it.x }
         val maxY = state.maxOf { it.y }
-        val grid = Array(maxY+1){CharArray(maxX+1)}
-        for (i in grid.indices){
-            for(j in grid[i].indices) {
+        val grid = Array(maxY + 1) { CharArray(maxX + 1) }
+        for (i in grid.indices) {
+            for (j in grid[i].indices) {
                 grid[i][j] = ' '
             }
         }
-        state.forEach { grid[it.y][it.x]='*' }
-       return grid
-            .map{it.joinToString (" ")}
-            .joinToString ("\n")
+        state.forEach { grid[it.y][it.x] = '*' }
+        return grid
+            .map { it.joinToString(" ") }
+            .joinToString("\n")
     }
+
     companion object {
         fun from(state: List<Pair<Int, Int>>): Paper {
             return Paper(state.map { Dot(it.first, it.second) })

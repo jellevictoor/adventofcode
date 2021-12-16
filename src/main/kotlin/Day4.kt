@@ -104,7 +104,7 @@ enum class State {
 
 fun play(input: List<Int>, boards: List<Board>): Int {
     var deductedBoards = boards;
-    var lastWinningBoard = boards.get(0)
+    var lastWinningBoard: Board
     for (value in input) {
         deductedBoards.forEach { it.updateBoard(value) }
         val winningBoards = evaluateBoards(deductedBoards)

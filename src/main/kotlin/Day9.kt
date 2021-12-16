@@ -1,10 +1,12 @@
+import kotlin.math.exp
+
 class HeightMapSeeker() : SolutionExecutor {
     override fun process(input: List<String>): Number {
         return HeightMap.from(input).getBasins()
             .sortedByDescending { it.size }
             .take(3)
             .map { it.size }
-            .reduce { acc, i ->  acc * i }
+            .reduce { acc, i -> acc * i }
     }
 }
 
@@ -25,26 +27,26 @@ class HeightMap(val grid: Grid) {
 
     companion object {
         fun from(input: List<String>): HeightMap {
-            val grid = mutableListOf<Point>()
-            val list = input.map { it -> it.toCharArray().map { Character.getNumericValue(it) } }
-            for (i in list.indices) {
-                for (j in 0 until list[i].size) {
-                    grid.add(Point(i, j, list[i][j]))
-                }
-            }
-            return HeightMap(Grid(grid))
+
+            return HeightMap(Grid.from(input))
         }
     }
 
     data class Point(val x: Int, val y: Int, val value: Int = -1)
 
-    data class Grid(private val points: List<Point>) {
-        private val maxX = points.maxOf { it.x }
-        private val minX = points.minOf { it.x }
-        private val maxY = points.maxOf { it.y }
-        private val minY = points.minOf { it.y }
+    data class Grid(val nodes: List<Point>) {
+        val maxX = nodes.maxOf { it.x }
+        private val minX = nodes.minOf { it.x }
+        val maxY = nodes.maxOf { it.y }
+        private val minY = nodes.minOf { it.y }
+        private val nodeLookup = Array(maxY + 1) { Array<Point>(maxX + 1) { Point(-1, -1) } }
+
+        init {
+            nodes.forEach { nodeLookup[it.x][it.y] = it }
+        }
+
         fun lookup(x: Int, y: Int): Point {
-            return points.first { it.x == x && it.y == y }
+            return nodeLookup[x][y]
         }
 
         fun adjecentLocations(point: Point): List<Point> {
@@ -59,7 +61,7 @@ class HeightMap(val grid: Grid) {
 
         fun getLowPoints(): List<Point> {
             val lowPoints = mutableListOf<Point>()
-            for (point in points) {
+            for (point in nodes) {
                 val isLowPoint =
                     adjecentLocations(point)
                         .map { lookup(it.x, it.y) }
@@ -73,6 +75,39 @@ class HeightMap(val grid: Grid) {
 
         fun getBasins(): List<Basin> {
             return Basin.from(this)
+        }
+
+        fun lookup(point: Point) = lookup(point.x, point.y)
+        fun expand(times: Int): Grid {
+            val expand = mutableListOf<Point>()
+            for (i in 0 until times) {
+                for (j in 0 until times) {
+                    expand.addAll(nodes
+                        .map {
+                            val newPoint = Point(it.x + ((maxX + 1) * i), it.y + ((maxY + 1) * j), it.value + i + j)
+                            if (newPoint.value > 9) {
+                                Point(newPoint.x, newPoint.y, newPoint.value - 9)
+                            } else {
+                                newPoint
+                            }
+                        })
+                }
+            }
+            return Grid(expand)
+        }
+
+        companion object {
+            fun from(input: List<String>): Grid {
+                val grid = mutableListOf<Point>()
+                val list = input.map { it -> it.toCharArray().map { Character.getNumericValue(it) } }
+                for (i in list.indices) {
+                    for (j in 0 until list[i].size) {
+                        grid.add(Point(i, j, list[i][j]))
+                    }
+                }
+                return Grid(grid)
+            }
+
         }
     }
 

@@ -3,6 +3,7 @@ fun run(executor: SolutionExecutor, inputFile: String): Number {
 }
 
 fun main() {
+    val start = System.currentTimeMillis()
     /*
     println("day 1")
     println(run(Counter(), "input-day1"))
@@ -23,8 +24,15 @@ fun main() {
     println(run(EncodingRunner(), "input-day10"))
     println(run(Day11(), "input-day11"))
     println(run(Day12(), "input-day12"))
-    */
+
     println(run(Day13(), "input-day13"))
 
+    println(run(Day14(), "input-day14"))
 
+
+
+    println(run(Day15(), "input-day15"))
+ */
+    val time = System.currentTimeMillis() - start
+    println("took $time")
 }
