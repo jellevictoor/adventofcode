@@ -1,7 +1,7 @@
 package io.victoor.aco2021.model.binaryTransmission
 
 abstract class DataPacket(binaryRepresentation: String) {
-    fun length(): Int = content.length
+
     abstract fun versionSum(): Int
     abstract fun value(): Int
 
@@ -9,6 +9,7 @@ abstract class DataPacket(binaryRepresentation: String) {
     val content = binaryRepresentation.substring(6)
     val rawValue = binaryRepresentation
     fun getBinaryRepresentaion(): String = rawValue
+    abstract fun getLength(): Int
 
     companion object {
         fun fromHex(content: String): DataPacket {

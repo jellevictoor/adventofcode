@@ -38,7 +38,7 @@ class Day16TestCase {
 
     @Test
     fun bigTests() {
-       // assertEquals(16, io.victoor.aco2021.DataPacket.fromHex("8A004A801A8002F478").versionSum())
+        assertEquals(16, DataPacket.fromHex("8A004A801A8002F478").versionSum())
         assertEquals(12, DataPacket.fromHex("620080001611562C8802118E34").versionSum())
         assertEquals(23, DataPacket.fromHex("C0015000016115A2E0802F182340").versionSum())
         assertEquals(31, DataPacket.fromHex("A0016C880162017C3686B18A3D4780").versionSum())

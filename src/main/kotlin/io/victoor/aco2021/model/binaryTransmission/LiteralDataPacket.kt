@@ -17,11 +17,12 @@ data class LiteralDataPacket(val binaryRepresentation: String) : DataPacket(bina
         }
         val binaryValue = characters.joinToString("")
         intValue = Integer.parseInt(binaryValue, 2)
-        this.length = length
+        this.length = length + header.length
     }
 
     override fun versionSum(): Int = header.version
     override fun value(): Int = intValue
+    override fun getLength(): Int = length
 
 
 }

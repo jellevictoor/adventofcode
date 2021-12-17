@@ -19,11 +19,10 @@ data class Operation(val binaryRepresentation: String) : DataPacket(binaryRepres
         val parsableContent = content.substring(1 + lengthIndex)
         var index = 0
         while (index < length) {
-            val dataPacket = DataPacket.fromBinaryRepresentation(parsableContent)
-            index += dataPacket.length()
+            val dataPacket = fromBinaryRepresentation(parsableContent.substring(index))
+            index += dataPacket.getLength()
             subPackages.add(dataPacket)
         }
-
     }
 
     fun getValue(): List<DataPacket> {
@@ -32,6 +31,9 @@ data class Operation(val binaryRepresentation: String) : DataPacket(binaryRepres
 
     override fun versionSum(): Int = header.version + subPackages.sumOf { it.versionSum() }
     override fun value(): Int = subPackages.sumOf { it.value() }
+    override fun getLength(): Int {
+        return content.length
+    }
 
 
 }
