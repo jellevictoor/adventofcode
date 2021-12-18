@@ -11,7 +11,7 @@ class Navigator : SolutionExecutor {
 fun nagivate(input: List<String>): Int {
     var position = Position.startPosition()
     input.forEach { position = move(position, it) }
-    return position.depth * position.horizontal
+    return position.x * position.y
 }
 
 enum class Directions(private val value: String) {
@@ -31,17 +31,17 @@ fun move(position: Position, stringValue: String): Position {
     }
 }
 
-data class Position(val depth: Int, val horizontal: Int, val aim: Int) {
+data class Position(val x: Int, val y: Int, val aim: Int) {
     companion object {
-        fun startPosition() = Position(0, 0,0)
+        fun startPosition() = Position(0, 0, 0)
     }
 
-    fun getPosition() = depth * horizontal
+    fun getPosition() = x * y
     fun moveDepth(value: Int): Position {
-        return Position(this.depth, horizontal, aim + value)
+        return Position(this.x, y, aim + value)
     }
 
     fun moveHorizontal(value: Int): Position {
-        return Position(depth + (value * aim), horizontal + value, aim)
+        return Position(x + (value * aim), y + value, aim)
     }
 }
