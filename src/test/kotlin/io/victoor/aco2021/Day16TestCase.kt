@@ -37,10 +37,25 @@ class Day16TestCase {
     }
 
     @Test
-    fun bigTests() {
+    fun bigTests16() {
         assertEquals(16, DataPacket.fromHex("8A004A801A8002F478").versionSum())
+
+    }
+
+    @Test
+    fun bigTests12() {
         assertEquals(12, DataPacket.fromHex("620080001611562C8802118E34").versionSum())
+
+    }
+
+    @Test
+    fun bigTests23() {
         assertEquals(23, DataPacket.fromHex("C0015000016115A2E0802F182340").versionSum())
+
+    }
+
+    @Test
+    fun bigTests31() {
         assertEquals(31, DataPacket.fromHex("A0016C880162017C3686B18A3D4780").versionSum())
 
     }
@@ -49,5 +64,11 @@ class Day16TestCase {
     fun decodeSubPackage() {
         val input = DataPacket.fromBinaryRepresentation("11010001010").value()
         assertEquals(10, input)
+    }
+    @Test
+    fun sumOperator(){
+        val packet = DataPacket.fromBinaryRepresentation("C200B40A82")
+        assertEquals(3, packet.value())
+
     }
 }

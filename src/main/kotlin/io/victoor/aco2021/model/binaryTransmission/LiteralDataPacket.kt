@@ -3,7 +3,7 @@ package io.victoor.aco2021.model.binaryTransmission
 data class LiteralDataPacket(val binaryRepresentation: String) : DataPacket(binaryRepresentation) {
     private val parts = content.windowed(5, 5)
     private val length: Int
-    val intValue: Int
+    val intValue: Long
 
     init {
         val characters = mutableListOf<String>()
@@ -16,12 +16,12 @@ data class LiteralDataPacket(val binaryRepresentation: String) : DataPacket(bina
             }
         }
         val binaryValue = characters.joinToString("")
-        intValue = Integer.parseInt(binaryValue, 2)
+        intValue = binaryValue.toLong( 2)
         this.length = length + header.length
     }
 
     override fun versionSum(): Int = header.version
-    override fun value(): Int = intValue
+    override fun value(): Long = intValue
     override fun getLength(): Int = length
 
 

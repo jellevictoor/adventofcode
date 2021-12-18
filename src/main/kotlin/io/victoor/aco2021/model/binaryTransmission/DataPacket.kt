@@ -3,7 +3,7 @@ package io.victoor.aco2021.model.binaryTransmission
 abstract class DataPacket(binaryRepresentation: String) {
 
     abstract fun versionSum(): Int
-    abstract fun value(): Int
+    abstract fun value(): Long
 
     val header = DataHeader.from(binaryRepresentation)
     val content = binaryRepresentation.substring(6)
@@ -24,7 +24,8 @@ abstract class DataPacket(binaryRepresentation: String) {
             val type = DataHeader.from(binaryRepresentation).type
             return when (type) {
                 4 -> LiteralDataPacket(binaryRepresentation)
-                else -> Operation(binaryRepresentation)
+                0 -> Operation(binaryRepresentation) { list -> list.sumOf { it.value() } }
+                else -> Operation(binaryRepresentation, { it.size.toLong() })
             }
         }
     }

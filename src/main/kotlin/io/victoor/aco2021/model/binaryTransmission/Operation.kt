@@ -2,27 +2,36 @@ package io.victoor.aco2021.model.binaryTransmission
 
 import io.victoor.aco2021.DataPacketValue
 
-data class Operation(val binaryRepresentation: String) : DataPacket(binaryRepresentation) {
+data class Operation(val binaryRepresentation: String, val operator: (List<LiteralDataPacket>) -> Long) : DataPacket(binaryRepresentation) {
     private val subPackages = mutableListOf<DataPacket>()
+    private val lengthType: Int
+    private val lengthIndex: Int
 
     init {
-        val lengthIndex: Int
-        val length: Int
-        if (this.content.substring(0, 1).toInt(2) == 0) {
+        lengthType = this.content.substring(0, 1).toInt(2)
+        if (lengthType == 0) {
             lengthIndex = 15
-            length = content.substring(1, lengthIndex + 1).toInt(2)
+            val length = content.substring(1, lengthIndex + 1).toInt(2)
+            val parsableContent = content.substring(1 + lengthIndex)
+            var index = 0
+            while (index < length) {
+                val subPackage = parsableContent.substring(index)
+                val dataPacket = fromBinaryRepresentation(subPackage)
+                index += dataPacket.getLength()
+                subPackages.add(dataPacket)
+            }
         } else {
             lengthIndex = 11
             val times = content.substring(1, lengthIndex + 1).toInt(2)
-            length = times * 11
+            var index = 0
+            val parsableContent = content.substring(1 + lengthIndex)
+            while (subPackages.size < times) {
+                val subPackage = parsableContent.substring(index + subPackages.sumOf { it.getLength() })
+                val dataPacket = fromBinaryRepresentation(subPackage)
+                subPackages.add(dataPacket)
+            }
         }
-        val parsableContent = content.substring(1 + lengthIndex)
-        var index = 0
-        while (index < length) {
-            val dataPacket = fromBinaryRepresentation(parsableContent.substring(index))
-            index += dataPacket.getLength()
-            subPackages.add(dataPacket)
-        }
+
     }
 
     fun getValue(): List<DataPacket> {
@@ -30,10 +39,17 @@ data class Operation(val binaryRepresentation: String) : DataPacket(binaryRepres
     }
 
     override fun versionSum(): Int = header.version + subPackages.sumOf { it.versionSum() }
-    override fun value(): Int = subPackages.sumOf { it.value() }
+    override fun value(): Long = subPackages.sumOf { it.value() }
     override fun getLength(): Int {
-        return content.length
+        return header.length +
+                1 + // length type
+                lengthIndex +  // length
+                subPackages.sumOf { it.getLength() }
     }
 
+
+}
+
+class Operator {
 
 }
