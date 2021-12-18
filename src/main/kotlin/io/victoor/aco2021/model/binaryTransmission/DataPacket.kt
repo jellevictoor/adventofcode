@@ -24,8 +24,15 @@ abstract class DataPacket(binaryRepresentation: String) {
             val type = DataHeader.from(binaryRepresentation).type
             return when (type) {
                 4 -> LiteralDataPacket(binaryRepresentation)
+
                 0 -> Operation(binaryRepresentation) { list -> list.sumOf { it.value() } }
-                else -> Operation(binaryRepresentation, { it.size.toLong() })
+                1 -> Operation(binaryRepresentation) { list -> list.fold(1L) { total, item -> total * item.value() } }
+                2 -> Operation(binaryRepresentation) { list -> list.minOf { item -> item.value() } }
+                3 -> Operation(binaryRepresentation) { list -> list.maxOf { item -> item.value() } }
+                5 -> Operation(binaryRepresentation) { list -> if(list[0].value() > list[1].value()) 1 else 0 }
+                6 -> Operation(binaryRepresentation) { list -> if(list[0].value() < list[1].value()) 1 else 0 }
+                7 -> Operation(binaryRepresentation) { list -> if(list[0].value() == list[1].value()) 1 else 0 }
+                else -> Operation(binaryRepresentation, { it.sumOf { it.value() } })
             }
         }
     }

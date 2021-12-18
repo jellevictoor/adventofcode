@@ -27,13 +27,13 @@ class Day16TestCase {
     @Test
     fun decodeOperationPacketData() {
         val input = DataPacket.fromHex("38006F45291200")
-        assertEquals(30, input.value())
+        assertEquals(1, input.value())
     }
 
     @Test
     fun decodeOperationPacketDataSecond() {
         val input = DataPacket.fromHex("EE00D40C823060")
-        assertEquals(1 + 2 + 3, input.value())
+        assertEquals( 3, input.value())
     }
 
     @Test
@@ -65,10 +65,17 @@ class Day16TestCase {
         val input = DataPacket.fromBinaryRepresentation("11010001010").value()
         assertEquals(10, input)
     }
-    @Test
-    fun sumOperator(){
-        val packet = DataPacket.fromBinaryRepresentation("C200B40A82")
-        assertEquals(3, packet.value())
 
+    @Test
+    fun sumOperator() {
+        val packet = DataPacket.fromHex("C200B40A82")
+        assertEquals(3, packet.value())
     }
+
+    @Test
+    fun productOperator() {
+        val packet = DataPacket.fromHex("04005AC33890")
+        assertEquals(54, packet.value())
+    }
+
 }

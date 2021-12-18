@@ -2,7 +2,7 @@ package io.victoor.aco2021.model.binaryTransmission
 
 import io.victoor.aco2021.DataPacketValue
 
-data class Operation(val binaryRepresentation: String, val operator: (List<LiteralDataPacket>) -> Long) : DataPacket(binaryRepresentation) {
+data class Operation(val binaryRepresentation: String, val operator: (List<DataPacket>) -> Long) : DataPacket(binaryRepresentation) {
     private val subPackages = mutableListOf<DataPacket>()
     private val lengthType: Int
     private val lengthIndex: Int
@@ -39,17 +39,11 @@ data class Operation(val binaryRepresentation: String, val operator: (List<Liter
     }
 
     override fun versionSum(): Int = header.version + subPackages.sumOf { it.versionSum() }
-    override fun value(): Long = subPackages.sumOf { it.value() }
+    override fun value(): Long = operator.invoke(subPackages.toList())
     override fun getLength(): Int {
         return header.length +
                 1 + // length type
                 lengthIndex +  // length
                 subPackages.sumOf { it.getLength() }
     }
-
-
-}
-
-class Operator {
-
 }
