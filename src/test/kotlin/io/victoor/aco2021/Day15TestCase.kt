@@ -1,4 +1,6 @@
 package io.victoor.aco2021
+import io.victoor.aco2021.model.Grid
+import io.victoor.aco2021.model.Point
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -17,8 +19,8 @@ class Day15TestCase {
             "1293138521",
             "2311944581"
         )
-        val from = HeightMap.Grid.from(input)
-        val shortestPath = Dijkstra(from).shortestPath(HeightMap.Point(0, 0, 1), HeightMap.Point(9, 9, 1))
+        val from = Grid.from(input)
+        val shortestPath = Dijkstra(from).shortestPath(Point(0, 0, 1), Point(9, 9, 1))
         assertEquals(40,shortestPath)
     }
     @Test
@@ -35,8 +37,8 @@ class Day15TestCase {
             "1293138521",
             "2311944581"
         )
-        val from = HeightMap.Grid.from(input).expand(5)
-        val shortestPath = Dijkstra(from).shortestPath(HeightMap.Point(0, 0, 1), HeightMap.Point(49, 49, 1))
+        val from = Grid.from(input).expand(5)
+        val shortestPath = Dijkstra(from).shortestPath(Point(0, 0, 1), Point(49, 49, 1))
         assertEquals(315,shortestPath)
     }
     @Test
@@ -45,7 +47,7 @@ class Day15TestCase {
             "11",
             "13"
         )
-        val from = HeightMap.Grid.from(input).expand(2)
+        val from = Grid.from(input).expand(2)
         assertEquals(16,from.nodes.size)
     }
     @Test
@@ -53,7 +55,7 @@ class Day15TestCase {
         val input = listOf(
             "1"
         )
-        val from = HeightMap.Grid.from(input).expand(2)
+        val from = Grid.from(input).expand(2)
         assertEquals(4,from.nodes.size)
     }
 }

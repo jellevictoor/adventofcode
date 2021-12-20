@@ -1,5 +1,6 @@
 package io.victoor.aco2021
 
+import io.victoor.aco2021.model.Point
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

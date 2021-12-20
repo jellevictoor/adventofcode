@@ -1,5 +1,7 @@
 package io.victoor.aco2021
 
+import io.victoor.aco2021.model.Point
+
 class MapSolver : SolutionExecutor {
     override fun process(input: List<String>): Int {
         return SeaMap.from(input).getNoOfDangerousAreas(2)
@@ -68,4 +70,3 @@ class Trajectory(val from: Point, val to: Point) {
     }
 }
 
-data class Point(val x: Int, val y: Int)

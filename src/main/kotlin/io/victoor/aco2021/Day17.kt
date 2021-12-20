@@ -1,5 +1,7 @@
 package io.victoor.aco2021
 
+import io.victoor.aco2021.model.Point
+
 class Day17 : SolutionExecutor {
     override fun process(input: List<String>): Number {
         val split = input.first().replace("target area: ", "")
