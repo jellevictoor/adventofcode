@@ -11,24 +11,22 @@ data class Grid(val nodes: List<Point>) {
         nodes.forEach { nodeLookup[it.y][it.x] = it }
     }
 
-    fun lookup(x: Int, y: Int): Point {
+    fun lookup(x: Int, y: Int, defaultValue: Int = 0): Point {
         return if (x >= minX && y >= minY && x <= maxX && y <= maxY) {
             nodeLookup[y][x]
         } else {
-            Point(x, y, 0)
+            Point(x, y, defaultValue)
         }
     }
 
-    fun infiniteAdjecentLocations(point: Point): List<Point> {
-        val positions = mutableListOf<Point>()
-
-        (-1 .. 1).forEach { yOffset ->
-            (-1 .. 1).forEach { xOffset ->
-                positions.add(Point(point.x+xOffset, point.y+yOffset))
+    fun infiniteAdjecentLocations(point: Point, boundaryValue: Int): List<Point> {
+        return sequence {
+            (-1..1).forEach { yOffset ->
+                (-1..1).forEach { xOffset ->
+                    yield(lookup(point.x + xOffset, point.y + yOffset, boundaryValue))
+                }
             }
-        }
-
-        return positions.map { lookup(it.x, it.y) }
+        }.toList()
     }
 
     fun adjecentLocations(point: Point): List<Point> {
@@ -76,8 +74,8 @@ data class Grid(val nodes: List<Point>) {
 
     fun contains(x: Int, y: Int) = x >= minX && y >= minY && x <= maxX && y <= maxY
 
-    fun grow(i: Int): Grid {
-        val expanded = Array(maxY + 1 + 2 * i) { y -> Array<Point>(maxX + 1 + 2 * i) { x -> Point(x, y, 0) } }
+    fun grow(i: Int, boundary: Int): Grid {
+        val expanded = Array(maxY + 1 + 2 * i) { y -> Array<Point>(maxX + 1 + 2 * i) { x -> Point(x, y, boundary) } }
         nodes.forEach { expanded[it.x + i][it.y + i] = Point(it.x + i, it.y + i, it.value) }
         return Grid(expanded
             .map { it.toList() }

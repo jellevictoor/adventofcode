@@ -21,8 +21,17 @@ class Day20TestCase {
     fun correctImage() {
         val input: List<String> = ("...\n" + "#..\n" + ".#.").split("\n").toList()
         val originalInput = Grid.fromLights(input)
-        val output: Grid = ImageCorrection(encoding).pass(originalInput)
+        val output: Grid = ImageCorrection(encoding).pass(originalInput, 1)
         assertThat(1, CoreMatchers.`is`(output.lookup(1, 1).value))
+    }
+
+    @Test
+    fun growCorrectImage() {
+        val input: List<String> = ("...\n" + "#..\n" + ".#.").split("\n").toList()
+        val originalInput = Grid.fromLights(input)
+        val expected = originalInput.nodes.count { it.value == 1 }
+        val actual = originalInput.grow(1, 0).nodes.count { it.value == 1 }
+        assertThat(actual, CoreMatchers.`is`(expected))
     }
 
     @Test
@@ -34,9 +43,8 @@ class Day20TestCase {
                 "..###").split("\n").toList()
         val originalInput = Grid.fromLights(input)
         val imageCorrection = ImageCorrection(encoding)
-        val output: Grid = imageCorrection.pass(originalInput)
-        val secondPass = imageCorrection.pass(output)
-        assertThat(35, CoreMatchers.`is`(secondPass.nodes.count { it.value == 1 }))
+        val output: Grid = imageCorrection.pass(originalInput, 2)
+        assertThat(35, CoreMatchers.`is`(output.nodes.count { it.value == 1 }))
 
     }
 
@@ -54,7 +62,7 @@ class Day20TestCase {
     fun infiniteAdjectentLocations() {
         val input: List<String> = ("...\n" + "#..\n" + ".#.").split("\n").toList()
         val originalInput = Grid.fromLights(input)
-        val infiniteAdjecentLocations = originalInput.infiniteAdjecentLocations(Point(1, 1))
+        val infiniteAdjecentLocations = originalInput.infiniteAdjecentLocations(Point(1, 1), 0)
         assertThat(
             infiniteAdjecentLocations, CoreMatchers.hasItems(
                 Point(0, 0, 0),
@@ -75,7 +83,7 @@ class Day20TestCase {
     fun infiniteAdjectentLocationsNotExisting() {
         val input: List<String> = ("...\n" + "#..\n" + ".#.").split("\n").toList()
         val originalInput = Grid.fromLights(input)
-        val infiniteAdjecentLocations = originalInput.infiniteAdjecentLocations(Point(0, 0))
+        val infiniteAdjecentLocations = originalInput.infiniteAdjecentLocations(Point(0, 0), 0)
         assertThat(
             infiniteAdjecentLocations, CoreMatchers.hasItems(
                 Point(-1, -1, 0),
@@ -90,11 +98,12 @@ class Day20TestCase {
             )
         )
     }
+
     @Test
     fun infiniteAdjectentLocationsExisting() {
         val input: List<String> = ("...\n" + "#..\n" + ".#.").split("\n").toList()
         val originalInput = Grid.fromLights(input)
-        val infiniteAdjecentLocations = originalInput.infiniteAdjecentLocations(Point(1, 1))
+        val infiniteAdjecentLocations = originalInput.infiniteAdjecentLocations(Point(1, 1), 0)
         assertThat(
             infiniteAdjecentLocations, hasItems(
                 Point(0, 0, 0),
@@ -112,7 +121,7 @@ class Day20TestCase {
 
     @Test
     fun growTest() {
-        val grow = Grid.fromLights(listOf("#")).grow(1)
+        val grow = Grid.fromLights(listOf("#")).grow(1, 0)
         assertThat(
             grow.nodes, hasItems(
                 Point(0, 0, 0),
