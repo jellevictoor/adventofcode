@@ -5,14 +5,30 @@ data class Grid(val nodes: List<Point>) {
     private val minX = nodes.minOf { it.x }
     val maxY = nodes.maxOf { it.y }
     private val minY = nodes.minOf { it.y }
-    private val nodeLookup = Array(maxY + 1) { Array<Point>(maxX + 1) { Point(-1, -1) } }
+    val nodeLookup = Array(maxY + 1) { Array<Point>(maxX + 1) { Point(-1, -1) } }
 
     init {
-        nodes.forEach { nodeLookup[it.x][it.y] = it }
+        nodes.forEach { nodeLookup[it.y][it.x] = it }
     }
 
     fun lookup(x: Int, y: Int): Point {
-        return nodeLookup[x][y]
+        return if (x >= minX && y >= minY && x <= maxX && y <= maxY) {
+            nodeLookup[y][x]
+        } else {
+            Point(x, y, 0)
+        }
+    }
+
+    fun infiniteAdjecentLocations(point: Point): List<Point> {
+        val positions = mutableListOf<Point>()
+
+        (-1 .. 1).forEach { yOffset ->
+            (-1 .. 1).forEach { xOffset ->
+                positions.add(Point(point.x+xOffset, point.y+yOffset))
+            }
+        }
+
+        return positions.map { lookup(it.x, it.y) }
     }
 
     fun adjecentLocations(point: Point): List<Point> {
@@ -21,7 +37,7 @@ data class Grid(val nodes: List<Point>) {
             Point(point.x + 1, point.y),
             Point(point.x, point.y - 1),
             Point(point.x, point.y + 1)
-        ).filter { it.x >= minX && it.y >= minY && it.x <= maxX && it.y <= maxY }
+        ).filter { contains(it.x, it.y) }
             .map { lookup(it.x, it.y) }
     }
 
@@ -58,16 +74,33 @@ data class Grid(val nodes: List<Point>) {
         return Grid(expand)
     }
 
+    fun contains(x: Int, y: Int) = x >= minX && y >= minY && x <= maxX && y <= maxY
+
+    fun grow(i: Int): Grid {
+        val expanded = Array(maxY + 1 + 2 * i) { y -> Array<Point>(maxX + 1 + 2 * i) { x -> Point(x, y, 0) } }
+        nodes.forEach { expanded[it.x + i][it.y + i] = Point(it.x + i, it.y + i, it.value) }
+        return Grid(expanded
+            .map { it.toList() }
+            .flatten())
+    }
+
     companion object {
         fun from(input: List<String>): Grid {
             val grid = mutableListOf<Point>()
             val list = input.map { it -> it.toCharArray().map { Character.getNumericValue(it) } }
-            for (i in list.indices) {
-                for (j in 0 until list[i].size) {
-                    grid.add(Point(i, j, list[i][j]))
+            for (y in list.indices) {
+                for (x in 0 until list[y].size) {
+                    grid.add(Point(x, y, list[y][x]))
                 }
             }
             return Grid(grid)
+        }
+
+        fun fromLights(input: List<String>): Grid {
+            val convertedInput = input
+                .map { it.replace("#", "1") }
+                .map { it.replace(".", "0") }
+            return from(convertedInput)
         }
 
     }

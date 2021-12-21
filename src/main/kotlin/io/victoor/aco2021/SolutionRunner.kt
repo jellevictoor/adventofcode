@@ -35,8 +35,9 @@ fun main() {
 
     println(io.victoor.aco2021.run(io.victoor.aco2021.Day15(), "input-day15"))
     println(run(Day16(), "input-day16"))
+    println(run(Day17(), "input-day17"))
  */
     val time = System.currentTimeMillis() - start
-    println(run(Day17(), "input-day17"))
+    println(run(Day20(), "input-day20"))
     println("took $time")
 }
