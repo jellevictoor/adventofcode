@@ -7,26 +7,31 @@ class ImageCorrection(val encoding: String) {
 
     fun pass(input: Grid, times: Int): Grid {
         var image = input
-        var boundaryValue = econdingByIndex(0)
         repeat(times) {
+            val boundaryValue = getBoundaryValue(it)
             val expandedImage = image.grow(1, boundaryValue)
-            println("before")
-            println(draw(expandedImage))
             val expandedNodes = expandedImage
                 .nodes
                 .map { Pair(it, expandedImage.infiniteAdjecentLocations(it, boundaryValue)) }
                 .map { Point(it.first.x, it.first.y, decode(it.second)) }
             image = Grid(expandedNodes)
-            println("after")
-            println(draw(image))
-            boundaryValue = getBoundaryValue(times)
         }
 
         return image
 
     }
 
-    private fun getBoundaryValue(pass: Int) = if (pass % 2 == 0) econdingByIndex(0) else econdingByIndex(511)
+    private fun getBoundaryValue(pass: Int): Int {
+        val boundaryChar = when (encoding.first() == '#') {
+            true -> if (pass % 2 == 0) encoding.last() else encoding.first()
+            false -> '.'
+        }
+
+        return when (boundaryChar) {
+            '#' -> 1
+            else -> 0
+        }
+    }
 
     private fun draw(expandedGrid: Grid): String {
         return expandedGrid.nodeLookup
