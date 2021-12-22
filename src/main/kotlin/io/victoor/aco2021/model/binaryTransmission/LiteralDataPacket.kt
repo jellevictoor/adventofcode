@@ -3,7 +3,7 @@ package io.victoor.aco2021.model.binaryTransmission
 data class LiteralDataPacket(val binaryRepresentation: String) : DataPacket(binaryRepresentation) {
     private val parts = content.windowed(5, 5)
     private val length: Int
-    val intValue: Long
+    private val intValue: Long
 
     init {
         val characters = mutableListOf<String>()
