@@ -1,35 +1,54 @@
 package io.victoor.aco2021
 
-import io.victoor.aco2021.model.game.DeterministicDice
 import io.victoor.aco2021.model.game.Game
-import io.victoor.aco2021.model.game.GamePosition
 import io.victoor.aco2021.model.game.Player
 
 class Day21 : SolutionExecutor {
     override fun process(input: List<String>): Number {
         // not parsing today
-        val player1 = Player("player1", 0)
-        val player2 = Player("player2", 0)
-        val players = listOf(
-            Pair(player1, GamePosition(3)),
-            Pair(player2, GamePosition(7))
-        )
-        return playGame(players, DeterministicDice(100))
+        val player1 = Player("player1", 0, 3)
+        val player2 = Player("player2", 0, 7)
+        return playGame(listOf(player1, player2))
     }
 
     fun playGame(
-        players: List<Pair<Player, GamePosition>>,
-        deterministicDice: DeterministicDice
+        players: List<Player>
     ): Number {
         val game = Game(
             10, players
         )
-        var turn = 0
-        while (game.getWinner() == null) {
-            game.move(players[turn % 2].first, deterministicDice.roll() + deterministicDice.roll() + deterministicDice.roll())
-            turn++
+        val universes = playTurn(players[0], players[1], mutableMapOf())
+        return universes.toList().maxOf { it }
+    }
+
+    /** dynamic programming + memozation*/
+    private fun playTurn(
+        playerWhoCanPlay: Player,
+        otherPlayer: Player,
+        cache: MutableMap<Pair<Player, Player>, Pair<Long, Long>>
+    ): Pair<Long, Long> {
+        var answer = Pair(0L, 0L)
+        if (playerWhoCanPlay.score >= 21) {
+            return Pair(1, 0)
+        } else if (otherPlayer.score >= 21) {
+            return Pair(0, 1)
         }
-        return game.score(deterministicDice)
+        val gameState = Pair(playerWhoCanPlay, otherPlayer)
+        if (cache.containsKey(gameState)) {
+            return cache[gameState]!!
+        }
+        (1..3).forEach { die1 ->
+            (1..3).forEach { die2 ->
+                (1..3).forEach { die3 ->
+                    val newPlayer = playerWhoCanPlay.roll(die1 + die2 + die3)
+                    val winsPerUniverse = playTurn(otherPlayer, newPlayer, cache)
+                    // reverse here because of switched players above
+                    answer = Pair(answer.first + winsPerUniverse.second, answer.second + winsPerUniverse.first)
+                }
+            }
+        }
+        cache[Pair(playerWhoCanPlay, otherPlayer)] = answer
+        return answer
     }
 
 }
