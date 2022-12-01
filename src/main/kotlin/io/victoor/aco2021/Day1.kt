@@ -1,5 +1,7 @@
 package io.victoor.aco2021
 
+import io.victoor.aoc.SolutionExecutor
+
 class Counter : SolutionExecutor {
     override fun process(input: List<String>): Int {
 

@@ -1,5 +1,7 @@
 package io.victoor.aco2021
 
+import io.victoor.aoc.SolutionExecutor
+
 class Day12 : SolutionExecutor {
     override fun process(input: List<String>): Number {
         return Graph.of(input.map { Pair(it.split("-")[0], it.split("-")[1]) }).paths().size

@@ -1,5 +1,6 @@
 package io.victoor.aco2021
 
+import io.victoor.aoc.SolutionExecutor
 import java.lang.Math.abs
 
 class CrabGroup(val initalPosition: List<Int>) : SolutionExecutor {

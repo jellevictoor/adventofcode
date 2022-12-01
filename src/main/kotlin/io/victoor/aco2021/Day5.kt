@@ -1,6 +1,7 @@
 package io.victoor.aco2021
 
 import io.victoor.aco2021.model.Point
+import io.victoor.aoc.SolutionExecutor
 
 class MapSolver : SolutionExecutor {
     override fun process(input: List<String>): Int {

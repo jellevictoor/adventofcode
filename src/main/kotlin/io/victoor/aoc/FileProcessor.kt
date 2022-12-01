@@ -1,4 +1,4 @@
-package io.victoor.aco2021
+package io.victoor.aoc
 
 import java.io.File
 

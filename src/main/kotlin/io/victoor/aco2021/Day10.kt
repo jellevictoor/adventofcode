@@ -1,5 +1,7 @@
 package io.victoor.aco2021
 
+import io.victoor.aoc.SolutionExecutor
+
 class EncodingRunner : SolutionExecutor {
     override fun process(input: List<String>): Number {
         val scores = input

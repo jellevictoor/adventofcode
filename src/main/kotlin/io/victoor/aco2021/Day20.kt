@@ -2,6 +2,7 @@ package io.victoor.aco2021
 
 import io.victoor.aco2021.model.Grid
 import io.victoor.aco2021.model.imagecorrection.ImageCorrection
+import io.victoor.aoc.SolutionExecutor
 
 class Day20 : SolutionExecutor {
     override fun process(input: List<String>): Number {

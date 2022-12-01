@@ -1,6 +1,7 @@
 package io.victoor.aco2021
 
 import io.victoor.aco2021.model.binaryTransmission.DataPacket
+import io.victoor.aoc.SolutionExecutor
 
 class Day16 : SolutionExecutor {
     override fun process(input: List<String>): Number {

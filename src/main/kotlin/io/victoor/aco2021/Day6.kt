@@ -1,5 +1,7 @@
 package io.victoor.aco2021
 
+import io.victoor.aoc.SolutionExecutor
+
 data class Lanternfish(val age: Int)
 
 class School(val age: Int, val population: Long) {

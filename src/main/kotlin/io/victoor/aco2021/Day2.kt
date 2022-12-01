@@ -1,5 +1,6 @@
 package io.victoor.aco2021
 
+import io.victoor.aoc.SolutionExecutor
 import java.util.*
 
 class Navigator : SolutionExecutor {

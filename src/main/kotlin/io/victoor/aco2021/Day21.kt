@@ -1,5 +1,7 @@
 package io.victoor.aco2021
 
+import io.victoor.aoc.SolutionExecutor
+
 
 data class Player(val name: String, val score: Int, val position: Int) {
     fun roll(dieRollValue: Int): Player {
