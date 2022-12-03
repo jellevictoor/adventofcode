@@ -13,6 +13,6 @@ class Day3TestCase {
                 "ttgJtRGJQctTZtZT\n" +
                 "CrZsJsPPZsGzwwsLwLmpwMDw\n"
         val outcome = Day3().process(input.split("\n"))
-        Assert.assertEquals(outcome, 157)
+        Assert.assertEquals(outcome, 70)
     }
 }

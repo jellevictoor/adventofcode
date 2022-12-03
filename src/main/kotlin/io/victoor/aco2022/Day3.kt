@@ -4,20 +4,15 @@ import io.victoor.aoc.SolutionExecutor
 
 class Day3 : SolutionExecutor {
     override fun process(input: List<String>): Number {
-        return input.map { processContent(it) }.sum()
+        return input.chunked(3).map { processContent(it) }.sum()
     }
 
-    fun processContent(it: String): Int {
-        val first = it.substring(0, it.length / 2)
-        val second = it.substring(it.length / 2)
-        val firstUniqueChars = first.toSet()
-        val secondUniqueChars = second.toSet()
-
-        return listOf(firstUniqueChars.toList(), secondUniqueChars.toList())
-            .flatten()
-            .groupingBy { it }
-            .eachCount()
-            .filter { it.value > 1 }
+    fun processContent(team: List<String>): Int {
+        return team
+            .map { it.toSet() }// only unique per team
+            .flatten() // join all char for the whole team
+            .groupingBy { it }.eachCount() // count the char occurence
+            .filter { it.value == 3 }
             .map { it.key }.sumOf {
                 getValueOfChar(it)
             }
