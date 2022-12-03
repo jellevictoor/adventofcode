@@ -10,7 +10,7 @@ class Day2TestCase {
                 "B X\n" +
                 "C Z\n").split('\n')
         val score = Day2().process(input.subList(0, 1))
-        Assert.assertEquals(score, 8)
+        Assert.assertEquals(score, 4)
     }
     @Test
     fun exampleInput1() {
@@ -26,6 +26,6 @@ class Day2TestCase {
                 "B X\n" +
                 "C Z\n").split('\n')
         val score = Day2().process(input.subList(2, 3))
-        Assert.assertEquals(6, score)
+        Assert.assertEquals(7 ,score)
     }
 }
