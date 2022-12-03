@@ -1,7 +1,7 @@
 package io.victoor.aoc
 
 import io.victoor.aco2022.Day1
-
+import io.victoor.aco2022.Day2
 
 
 fun run(executor: SolutionExecutor, inputFile: String): Number {
@@ -43,6 +43,6 @@ fun main() {
     println(run(Day21(), "input-day20"))
  */
     val time = System.currentTimeMillis() - start
-    println(run(Day1(), "aco2022/input-day1"))
+    println(run(Day2(), "aco2022/input-day2"))
     println("took $time")
 }
