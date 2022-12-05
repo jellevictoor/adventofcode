@@ -59,7 +59,7 @@ data class Dock(val positions: List<LinkedList<String>>) {
             for (i in 1 .. instruction.qty) {
                 itemsToMove.add(fromStack.pop())
             }
-            for(itemToAdd in itemsToMove) {
+            for(itemToAdd in itemsToMove.reversed()) {
                 toStack.offerFirst(itemToAdd)
             }
         }
