@@ -8,7 +8,7 @@ class Day6 : SolutionExecutor {
         return firstFirstOccurred(input, packageSize)
     }
 
-    public fun firstFirstOccurred(input: List<String>, packageSize: Int): Int {
+    fun firstFirstOccurred(input: List<String>, packageSize: Int): Int {
         val startPackage = input.first().windowed(packageSize).first { it.toSet().size == packageSize }
         return input.first().indexOf(startPackage) + startPackage.length
     }
