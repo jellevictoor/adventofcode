@@ -17,27 +17,52 @@ class Day8 : SolutionExecutor {
 data class Tree(val height: Int)
 data class Forest(val trees: MutableList<MutableList<Tree>>) {
     fun notVisibleTrees(): Number {
-        var visibleTrees = mutableListOf<Tree>()
+        var visibleTrees = mutableListOf<Int>()
         for (currentRow in trees.withIndex()) {
             for (currentColumn in trees[currentRow.index].withIndex()) {
                 val column = trees.map { it[currentColumn.index] }
                 val row = trees[currentRow.index]
                 val tree = currentColumn.value
-                if ((row.subList(0, currentColumn.index).maxOfOrNull { it.height } ?: -1) < tree.height ||
-                    (row.subList(currentColumn.index+1, trees.size).maxOfOrNull { it.height } ?: -1) < tree.height ||
-                    (column.subList(0, currentRow.index).maxOfOrNull { it.height } ?: -1) < tree.height ||
-                    (column.subList(currentRow.index+1, trees.size).maxOfOrNull { it.height } ?: -1) < tree.height
-                ) {
-                    println("tree at position ${currentRow.index},${currentColumn.index} has size $tree is visible")
-                    visibleTrees.add(tree)
-                }else{
-                    println("tree at position ${currentRow.index},${currentColumn.index} has size $tree is hidden")
 
+                val leftView = row.subList(0, currentColumn.index).reversed()
+                val indexOfFirstLargerTreeLeft = leftView.indexOfFirst { it.height >= tree.height }
+                val left = if (indexOfFirstLargerTreeLeft == -1) {
+                    currentColumn.index
+                } else {
+                    indexOfFirstLargerTreeLeft + 1
                 }
+
+                val rightView = row.subList(currentColumn.index + 1, row.size)
+                val indexOfFirstLargerTreeRight = rightView.indexOfFirst { it.height >= tree.height }
+                val right = if (indexOfFirstLargerTreeRight == -1) {
+                    column.size - 1 - currentColumn.index
+                } else {
+                    indexOfFirstLargerTreeRight + 1
+                }
+
+                val topView = column.subList(0, currentRow.index).reversed()
+                val indexOfFirstLargerTreeTop = topView.indexOfFirst { it.height >= tree.height }
+                val top = if (indexOfFirstLargerTreeTop == -1) {
+                    currentRow.index
+                } else {
+                    indexOfFirstLargerTreeTop + 1
+                }
+
+                val bottomView = column.subList(currentRow.index + 1, row.size)
+                val indexOfFirstLargerTreeBottom = bottomView.indexOfFirst { it.height >= tree.height }
+                val bottom = if (indexOfFirstLargerTreeBottom == -1) {
+                    row.size - 1 - currentRow.index
+                } else {
+                    indexOfFirstLargerTreeBottom + 1
+                }
+
+                val product = left * right * top * bottom
+                visibleTrees.add(product)
+                println("tree at ${currentRow.index},${currentColumn.index} has a $left * $right * $bottom * $top score of $product")
             }
         }
 
-        return visibleTrees.size
+        return visibleTrees.maxOf { it }
     }
 
     companion object {

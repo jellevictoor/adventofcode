@@ -12,6 +12,6 @@ class Day8TestCase {
                 "33549\n" +
                 "35390").split("\n")
         val process = Day8().process(input)
-        Assert.assertEquals(21, process)
+        Assert.assertEquals(8, process)
     }
 }
