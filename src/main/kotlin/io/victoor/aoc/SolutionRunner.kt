@@ -42,6 +42,6 @@ fun main() {
     println(run(Day21(), "input-day20"))
  */
     val time = System.currentTimeMillis() - start
-    println(run(Day8(), "aco2022/input-day8"))
+    println(run(Day7(), "aco2022/input-day7"))
     println("took $time")
 }
